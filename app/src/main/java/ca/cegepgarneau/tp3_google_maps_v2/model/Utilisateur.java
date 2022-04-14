@@ -35,7 +35,7 @@ public class Utilisateur {
     @ColumnInfo(name = "message_col")
     private String message;
 
-    public Utilisateur(@NonNull String firstname, @NonNull String lastname,
+    /*public Utilisateur(@NonNull String firstname, @NonNull String lastname,
                        @NonNull String picture, @NonNull Float latitude,
                        @NonNull Float longitude, @NonNull String message){
 
@@ -45,6 +45,10 @@ public class Utilisateur {
         this.latitude = latitude;
         this.longitude = longitude;
         this.message = message;
+    }*/
+
+    public Utilisateur() {
+
     }
 
     public int getId() {

@@ -16,13 +16,23 @@
         app:srcCompat="@drawable/icon1" />
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_firstname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Nom Utilisateur"
+        android:text="First Name"
         app:layout_constraintStart_toEndOf="@+id/img_utilisateur"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_lastname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Last name"
+        app:layout_constraintStart_toEndOf="@+id/tv_firstname"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -31,9 +41,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Nom Utilisateur"
+        android:text="Message"
         app:layout_constraintStart_toEndOf="@+id/img_utilisateur"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_lastname" />
 
     <View
         android:id="@+id/divider"
