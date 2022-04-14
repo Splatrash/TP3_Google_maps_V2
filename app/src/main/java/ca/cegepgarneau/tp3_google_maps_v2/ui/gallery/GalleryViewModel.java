@@ -1,19 +1,25 @@
 package ca.cegepgarneau.tp3_google_maps_v2.ui.gallery;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+import java.util.List;
 
-    private final MutableLiveData<String> mText;
+import ca.cegepgarneau.tp3_google_maps_v2.data.UtilisateurRoomDatabase;
+import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
 
-    public GalleryViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+public class GalleryViewModel extends AndroidViewModel {
+
+    private LiveData<List<Utilisateur>> allUtilisateurs;
+    private UtilisateurRoomDatabase mDb;
+
+    public GalleryViewModel(Application application) {
+        super(application);
+        mDb = UtilisateurRoomDatabase.getDatabase(application);
+        allUtilisateurs = mDb.utilisateurDao().getAllUtilisateurs();
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
+    public LiveData<List<Utilisateur>> getAllUtilisateurs() { return allUtilisateurs; }
 }
