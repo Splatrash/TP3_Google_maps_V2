@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+@Entity(tableName = "utilisateur_table")
 public class Utilisateur {
 
     @PrimaryKey(autoGenerate = true)
@@ -65,6 +66,25 @@ public class Utilisateur {
     }
     public void setLastname(@NonNull String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+    public void setPicture(@NonNull String picture) { this.picture = picture; }
+
+    public Float getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(@NonNull Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(@NonNull Float longitude) {
+        this.longitude = longitude;
     }
 
     public String getMessage() {
