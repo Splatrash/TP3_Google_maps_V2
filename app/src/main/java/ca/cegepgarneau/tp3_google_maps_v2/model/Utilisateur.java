@@ -1,0 +1,79 @@
+package ca.cegepgarneau.tp3_google_maps_v2.model;
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+public class Utilisateur {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @NonNull
+    @ColumnInfo(name = "firstname_col")
+    private String firstname;
+
+    @NonNull
+    @ColumnInfo(name = "lastname_col")
+    private String lastname;
+
+    @NonNull
+    @ColumnInfo(name = "picture_col")
+    private String picture;
+
+    @NonNull
+    @ColumnInfo(name = "latitude_col")
+    private Float latitude;
+
+    @NonNull
+    @ColumnInfo(name = "longitude_col")
+    private Float longitude;
+
+    @NonNull
+    @ColumnInfo(name = "message_col")
+    private String message;
+
+    public Utilisateur(@NonNull String firstname, @NonNull String lastname,
+                       @NonNull String picture, @NonNull Float latitude,
+                       @NonNull Float longitude, @NonNull String message){
+
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.picture = picture;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.message = message;
+    }
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+    public void setFirstname(@NonNull String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+    public void setLastname(@NonNull String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(@NonNull String message) { this.message = message; }
+
+
+
+}
+
+

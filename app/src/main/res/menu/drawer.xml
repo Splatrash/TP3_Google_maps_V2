@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/bt_config_toolbar"
+        android:title="@string/config_toolbar"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/bt_suppression_toolbar"
+        android:title="@string/suppression_toolbar"
         app:showAsAction="never" />
 </menu>
