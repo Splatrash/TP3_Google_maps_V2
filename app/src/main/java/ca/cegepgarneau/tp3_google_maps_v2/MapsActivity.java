@@ -18,6 +18,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
+    /*
+    *
+    * À DELETE DANS LE FUTURE, LA GARDE POUR L'INSTANT POUR ÊTRE SÛRE
+    *
+    * */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
