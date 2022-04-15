@@ -1,15 +1,24 @@
 package ca.cegepgarneau.tp3_google_maps_v2;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,6 +33,7 @@ import ca.cegepgarneau.tp3_google_maps_v2.data.UtilisateurRoomDatabase;
 import ca.cegepgarneau.tp3_google_maps_v2.databinding.ActivityDrawerBinding;
 import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireAjoutMarker;
+import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireModifierUtilisateur;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.home.HomeFragment;
 
 public class DrawerActivity extends AppCompatActivity {
@@ -34,7 +44,15 @@ public class DrawerActivity extends AppCompatActivity {
     private boolean formIsUp;
     private UtilisateurRoomDatabase utilisateursListDb;
 
+    //Variable dans l'activité principal sinon perte de ses données lors de la fermeture et réouverture de la map.
+    public static GoogleMap mMap;
+
     public static LatLng markerAjoute;
+
+    private String prenomUtilisateurKey = "prenom";
+    private String nomUtilisateurKey = "nom";
+
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +62,15 @@ public class DrawerActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         formIsUp = false;
+
+        prefs = this.getSharedPreferences("ca.cegepgarneau.tp3_google_maps_v2", Context.MODE_PRIVATE);
+
+        if(!prefs.contains(prenomUtilisateurKey)){
+            prefs.edit().putString(prenomUtilisateurKey, String.valueOf(R.string.default_user_firstname)).apply();
+        }
+        if(!prefs.contains(nomUtilisateurKey)){
+            prefs.edit().putString(nomUtilisateurKey, String.valueOf(R.string.default_user_lastname)).apply();
+        }
 
         setSupportActionBar(binding.appBarDrawer.toolbar);
 
@@ -75,6 +102,22 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.bt_config_toolbar:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment_form_modifier_mtilisateur, new FormulaireModifierUtilisateur(), "formUtilisateur")
+                        .addToBackStack(null).commit();
+                return true;
+            case R.id.bt_suppression_toolbar:
+                SupprimerToutesUtilisateurs();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         try {
             Float.parseFloat(HomeFragment.tvDistance.getText().toString());
@@ -101,31 +144,57 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
     public void AjouterUnMarker(String message){
+        prefs = this.getSharedPreferences("ca.cegepgarneau.tp3_google_maps_v2", Context.MODE_PRIVATE);
         utilisateursListDb = UtilisateurRoomDatabase.getDatabase(this);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                Random r = new Random();
-                int nbrIconPossible = 5;
+                String prenom = prefs.getString(prenomUtilisateurKey, new String());
+                String nom = prefs.getString(nomUtilisateurKey, new String());
                 Utilisateur utilisateur = new Utilisateur();
-                utilisateur.setFirstname("UserFirstName");
-                utilisateur.setLastname("UserLastName");
+                utilisateur.setFirstname(prenom);
+                utilisateur.setLastname(nom);
                 utilisateur.setMessage(message);
                 utilisateur.setLatitude(markerAjoute.latitude);
                 utilisateur.setLongitude(markerAjoute.longitude);
-                utilisateur.setPicture("https://robohash.org/"+"UserFirstName"+"UserLastName");
+                utilisateur.setPicture("https://robohash.org/"+nom+prenom);
                 utilisateursListDb.utilisateurDao().insert(utilisateur);
             }
         });
     }
 
+    public void ModifierUtilisateur(String prenom, String nom){
+        prefs = this.getSharedPreferences("ca.cegepgarneau.tp3_google_maps_v2", Context.MODE_PRIVATE);
+
+        if(prenom != ""){
+            prefs.edit().putString(prenomUtilisateurKey, prenom).apply();
+        }
+        if(nom != ""){
+            prefs.edit().putString(nomUtilisateurKey, nom).apply();
+        }
+        Toast.makeText(this, "Données utilisateur modifiées", Toast.LENGTH_LONG).show();
+
+    }
+
     public void closeForm(){
         formIsUp = false;
-        FormulaireAjoutMarker formulaireAjoutMarkerRemove = (FormulaireAjoutMarker) getSupportFragmentManager()
-                .findFragmentByTag("TAG");
+        FormulaireModifierUtilisateur formulaireModifierUtilisateurFragmentRemove = (FormulaireModifierUtilisateur) getSupportFragmentManager()
+                .findFragmentByTag("formUtilisateur");
         getSupportFragmentManager()
                 .beginTransaction()
-                .remove(formulaireAjoutMarkerRemove)
+                .remove(formulaireModifierUtilisateurFragmentRemove)
                 .commit();
     }
+
+    public void SupprimerToutesUtilisateurs(){
+        utilisateursListDb = UtilisateurRoomDatabase.getDatabase(this);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                utilisateursListDb.utilisateurDao().deleteAllUtilisateurs();
+            }
+        });
+    }
+
+
 }

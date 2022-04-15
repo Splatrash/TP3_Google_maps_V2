@@ -43,6 +43,7 @@ import ca.cegepgarneau.tp3_google_maps_v2.data.AppExecutors;
 import ca.cegepgarneau.tp3_google_maps_v2.databinding.FragmentHomeBinding;
 import ca.cegepgarneau.tp3_google_maps_v2.datahttp.VolleyUtils;
 import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
+import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireAjoutMarker;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.UtilisateurAdapter;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.gallery.GalleryViewModel;
 
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
     private static final int LOCATION_PERMISSION_CODE = 1;
     private static final String TAG = "HOME";
-    private GoogleMap mMap;
+
     private FragmentHomeBinding binding;
 
     public static TextView tvDistance;
@@ -109,16 +110,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             }
         });
         return view;
-
-        /*HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;*/
     }
 
     @Override
@@ -134,15 +125,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        // Service pour suivre la position de l'utilisateur
-
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        //SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-
-        //CRASH ICI
-        //mapFragment.getMapAsync(this);
-
     }
 
     @Override
@@ -153,35 +135,29 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
+        DrawerActivity.mMap = googleMap;
 
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
-        /*
-        //Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        */
+        DrawerActivity.mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
 
         // détection du click sur une fenêtre d'information d'un marqueur
-        mMap.setOnInfoWindowClickListener(this);
+        DrawerActivity.mMap.setOnInfoWindowClickListener(this);
         // Permet de modifier l'apparence de la fenêtre d'information d'un marqueur
 
         // Permet de détecter le click sur le bouton de position
-        mMap.setOnMyLocationButtonClickListener(this);
+        DrawerActivity.mMap.setOnMyLocationButtonClickListener(this);
         // Permet de détecter le click sur la position de l'utilisateur
-        mMap.setOnMyLocationClickListener(this);
+        DrawerActivity.mMap.setOnMyLocationClickListener(this);
 
         // Détecter click sur la carte
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        DrawerActivity.mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 Log.d(TAG, "onMapClick: " + latLng.toString());
-                mMap.addMarker(new MarkerOptions().position(latLng)
+                DrawerActivity.mMap.addMarker(new MarkerOptions().position(latLng)
                         .title("Je suis ici !")
                         .draggable(true)
                 );
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                DrawerActivity.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
                 // Supprime marker ajouté par le bouton Add
                 if (markerCamera != null) {
@@ -195,7 +171,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         /////////////////////////////////////////////
         //VA SERVIR POUR AJOUTER UN MARKER SUR LA MAP
         /////////////////////////////////////////////
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        DrawerActivity.mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
 
@@ -203,9 +179,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
                 DrawerActivity.markerAjoute = latLng;
 
-                Log.d(TAG, "onMapClick: " + latLng.toString());
-                mMap.addMarker(new MarkerOptions().position(latLng).title("MESSAGE"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                getChildFragmentManager().beginTransaction().replace(R.id.fl_fragment_form, new FormulaireAjoutMarker(), "formAjouterMarker")
+                        .addToBackStack(null).commit();
+
             }
         });
 
@@ -242,58 +218,42 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                             Log.d(TAG, "onSuccess: " + location);
                             // Centre la carte sur la position de l'utilisateur au démarrage
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                            DrawerActivity.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                         }
                     }
                 });
 
         setMarkersOnMap();
 
-        /*
-        // Parcours la liste des utilisateurs et positionne les marqueurs
-        // On met l'objet message dans le Tag du marqueur
-        new VolleyUtils().getUtilisateurs(getContext(), new VolleyUtils.ListUtilisateursAsyncResponse() {
-            @Override
-            public void processFinished(ArrayList<Utilisateur> utilisateurArrayList) {
-                AppExecutors.getInstance().mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Efface la bd
-                        Log.d(TAG, utilisateurArrayList.toString());
-                        for (Utilisateur utilisateur : utilisateurArrayList) {
-                            LatLng position = new LatLng(utilisateur.getLatitude(), utilisateur.getLongitude());
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(position)
-                                    .title(utilisateur.getMessage()))
-                                    .setTag(utilisateur);
-                        }
-                    }
-                });
-            }
-        });
-        */
+    }
 
+    public void closeForm(){
+        formIsUp = false;
+        FormulaireAjoutMarker formulaireAjoutMarkerRemove = (FormulaireAjoutMarker) getChildFragmentManager()
+                .findFragmentByTag("formAjouterMarker");
+        getChildFragmentManager()
+                .beginTransaction()
+                .remove(formulaireAjoutMarkerRemove)
+                .commit();
     }
 
     public void setMarkersOnMap(){
         for (Utilisateur utilisateur : utilisateursListDb){
             LatLng position = new LatLng(utilisateur.getLatitude(), utilisateur.getLongitude());
-            mMap.addMarker(new MarkerOptions()
+            DrawerActivity.mMap.addMarker(new MarkerOptions()
                     .position(position)
                     .title(utilisateur.getMessage()))
                     .setTag(utilisateur);
         }
     }
 
-
-
     private void enableMyLocation() {
         // vérification si la permission de localisation est déjà donnée
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            if (mMap != null) {
+            if (DrawerActivity.mMap != null) {
                 // Permet d'afficher le bouton pour centrer la carte sur la position de l'utilisateur
-                mMap.setMyLocationEnabled(true);
+                DrawerActivity.mMap.setMyLocationEnabled(true);
             }
         } else {
             // La permission est manquante, demande donc la permission

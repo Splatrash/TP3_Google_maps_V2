@@ -16,6 +16,17 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
+    <FrameLayout
+        android:id="@+id/fl_fragment_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintStart_toStartOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map">>
+
+    </FrameLayout>
+
     <TextView
         android:visibility="invisible"
         android:id="@+id/tv_distance"

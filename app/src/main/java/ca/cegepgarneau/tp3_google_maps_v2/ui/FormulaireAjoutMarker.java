@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import ca.cegepgarneau.tp3_google_maps_v2.DrawerActivity;
 import ca.cegepgarneau.tp3_google_maps_v2.R;
+import ca.cegepgarneau.tp3_google_maps_v2.ui.home.HomeFragment;
 
 public class FormulaireAjoutMarker extends Fragment {
 
@@ -24,6 +25,8 @@ public class FormulaireAjoutMarker extends Fragment {
         Button btnAjouter = view.findViewById(R.id.btn_ajouter);
         EditText etMessage = view.findViewById(R.id.et_message);
 
+        HomeFragment homeFragment = ((HomeFragment)FormulaireAjoutMarker.this.getParentFragment());
+
         btnAjouter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,6 +36,7 @@ public class FormulaireAjoutMarker extends Fragment {
                 {
                     ((DrawerActivity)getActivity()).AjouterUnMarker(message);
                 }
+                homeFragment.closeForm();
             }
         });
         Button btnAnnulerPopup = view.findViewById(R.id.btn_annuler);
@@ -40,7 +44,8 @@ public class FormulaireAjoutMarker extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ((DrawerActivity)getActivity()).closeForm();
+                homeFragment.closeForm();
+
             }
         });
         return view;

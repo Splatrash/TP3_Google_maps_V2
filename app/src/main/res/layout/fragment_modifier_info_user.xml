@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D000000"
+    tools:context=".ui.FormulaireModifierUtilisateur">
+
+    <RelativeLayout
+        android:id="@+id/rl_popup_gestion_taches"
+        android:layout_width="304dp"
+        android:layout_height="228dp"
+        android:layout_marginBottom="96dp"
+        android:background="#336570"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_modifier_utilisateur"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="256px"
+            android:layout_marginBottom="16px"
+            android:text="@string/btn_modifier_utilisateur"
+            android:textColor="#06FFE3"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_annuler_modif_utilisateur"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="32px"
+            android:layout_marginBottom="16px"
+            android:text="@string/btn_annuler_form_modif_utilisateur"
+            android:textColor="#06FFE3"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_titre_popup_modif_utilisateur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_marginTop="32px"
+            android:text="@string/tv_titre_form_modif_utilisateur"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_prenom_utilisateur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+
+            android:ems="10"
+            android:hint="@string/et_prenom_form_utilisateur"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/et_nom_utilisateur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="112dp"
+            android:ems="10"
+            android:hint="@string/et_nom_form_utilisateur"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

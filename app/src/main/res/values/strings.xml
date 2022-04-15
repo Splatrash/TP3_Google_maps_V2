@@ -18,4 +18,16 @@
     <string name="btn_add_marker">Ajouter</string>
     <string name="btn_cancel_add_marker">Annuler</string>
     <string name="et_message_hint">Votre message...</string>
+
+    <string name="tv_titre_form_modif_utilisateur">Modifier l\'utilisateur</string>
+    <string name="btn_modifier_utilisateur">Modifier</string>
+    <string name="btn_annuler_form_modif_utilisateur">Annuler</string>
+    <string name="et_prenom_form_utilisateur">votre prénom...</string>
+    <string name="et_nom_form_utilisateur">votre nom...</string>
+
+    <string name="default_user_firstname">Garneau</string>
+    <string name="default_user_lastname">Cégep</string>
+
+
+
 </resources>

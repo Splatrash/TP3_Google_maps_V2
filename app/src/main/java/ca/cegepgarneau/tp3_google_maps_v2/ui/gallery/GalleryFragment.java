@@ -78,9 +78,10 @@ public class GalleryFragment extends Fragment {
 
     public void refresh() {
 
+
         boolean test = false;
         //////////////////////////////////////////////////////////
-        // Trouver comment vérifier
+        // Trouver comment vérifier et ne pas appeler volley si la bd n'est pas vide
         /////////////////////////////////////////////////////////
         if (test){
             new VolleyUtils().getUtilisateurs(getContext(), new VolleyUtils.ListUtilisateursAsyncResponse() {
