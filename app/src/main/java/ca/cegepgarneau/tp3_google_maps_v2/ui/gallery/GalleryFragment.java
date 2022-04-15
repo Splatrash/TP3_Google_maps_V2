@@ -1,6 +1,7 @@
 package ca.cegepgarneau.tp3_google_maps_v2.ui.gallery;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,11 +80,15 @@ public class GalleryFragment extends Fragment {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-                        // Efface la bd
+                        //Pour éviter un: java.util.ConcurrentModificationException
+                        List<Utilisateur> listUtilisateurTempo = new ArrayList<Utilisateur>(utilisateurArrayList);
+
+                        // Efface la bdy
                         mDb.utilisateurDao().deleteAllUtilisateurs();
                         // Insère les articles dans la bd
-                        for (Utilisateur utilisateur : utilisateurArrayList) {
-//                          //Log.d("TAG", "run: " + utilisateur);
+                        for (Utilisateur utilisateur : listUtilisateurTempo) {
+                            //Log.d("TAG", "run: " + utilisateur);
+
                             mDb.utilisateurDao().insert(utilisateur);
                         }
                     }

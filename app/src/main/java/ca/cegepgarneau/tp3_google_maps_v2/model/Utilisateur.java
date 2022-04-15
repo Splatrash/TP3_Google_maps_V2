@@ -25,11 +25,11 @@ public class Utilisateur {
 
     @NonNull
     @ColumnInfo(name = "latitude_col")
-    private Float latitude;
+    private Double latitude;
 
     @NonNull
     @ColumnInfo(name = "longitude_col")
-    private Float longitude;
+    private Double longitude;
 
     @NonNull
     @ColumnInfo(name = "message_col")
@@ -77,17 +77,15 @@ public class Utilisateur {
     }
     public void setPicture(@NonNull String picture) { this.picture = picture; }
 
-    public Float getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
-    public void setLatitude(@NonNull Float latitude) {
+    public void setLatitude(@NonNull Double latitude) {
         this.latitude = latitude;
     }
 
-    public Float getLongitude() {
-        return longitude;
-    }
-    public void setLongitude(@NonNull Float longitude) {
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(@NonNull Double longitude) {
         this.longitude = longitude;
     }
 

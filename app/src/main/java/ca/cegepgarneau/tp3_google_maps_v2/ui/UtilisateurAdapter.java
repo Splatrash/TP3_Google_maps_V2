@@ -30,6 +30,7 @@ public class UtilisateurAdapter extends RecyclerView.Adapter<UtilisateurAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Utilisateur utilisateur = utilisateurs.get(position);
+        // TODO: 2022-04-14 Changer l'icon de l'image 
         //////////////////////////////////////////////////////////
         //holder.imgPicture.(utilisateur.getPicture().toString());
         //////////////////////////////////////////////////////////
