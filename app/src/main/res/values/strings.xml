@@ -14,4 +14,8 @@
     <string name="title_activity_maps">MapsActivity</string>
 
     <string name="tv_distance_default">Distance</string>
+
+    <string name="btn_add_marker">Ajouter</string>
+    <string name="btn_cancel_add_marker">Annuler</string>
+    <string name="et_message_hint">Votre message...</string>
 </resources>

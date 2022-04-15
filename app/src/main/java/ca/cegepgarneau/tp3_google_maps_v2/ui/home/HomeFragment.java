@@ -16,7 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -35,11 +37,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.cegepgarneau.tp3_google_maps_v2.DrawerActivity;
 import ca.cegepgarneau.tp3_google_maps_v2.R;
 import ca.cegepgarneau.tp3_google_maps_v2.data.AppExecutors;
 import ca.cegepgarneau.tp3_google_maps_v2.databinding.FragmentHomeBinding;
 import ca.cegepgarneau.tp3_google_maps_v2.datahttp.VolleyUtils;
 import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
+import ca.cegepgarneau.tp3_google_maps_v2.ui.UtilisateurAdapter;
+import ca.cegepgarneau.tp3_google_maps_v2.ui.gallery.GalleryViewModel;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
@@ -50,9 +55,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
     public static TextView tvDistance;
 
+    private HomeViewModel homeViewModel;
+    private ArrayList<Utilisateur> utilisateursListDb;
+    private UtilisateurAdapter utilisateurAdapter;
+
     private Location userLocation;
 
     private Marker markerCamera;
+
+    private boolean formIsUp;
 
     private List<Utilisateur> utilisateurList;
 
@@ -64,7 +75,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         tvDistance = (TextView) view.findViewById(R.id.tv_distance);
@@ -88,6 +99,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             }
         };
 
+        homeViewModel.getAllUtilisateurs().observe(getViewLifecycleOwner(), new Observer<List<Utilisateur>>() {
+            @Override
+            public void onChanged(List<Utilisateur> utilisateursList) {
+                utilisateursListDb.clear();
+                utilisateursListDb.addAll(utilisateursList);
+                utilisateurAdapter.notifyDataSetChanged();
+                setMarkersOnMap();
+            }
+        });
         return view;
 
         /*HomeViewModel homeViewModel =
@@ -99,6 +119,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;*/
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Mise en place de l'adapter pour le recyclerView
+        utilisateursListDb = new ArrayList<>();
+        // Envoi une liste vide d'article dans l'adapter
+        utilisateurAdapter = new UtilisateurAdapter(utilisateursListDb);
     }
 
     @Override
@@ -168,6 +198,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
+
+                formIsUp = !formIsUp;
+
+                DrawerActivity.markerAjoute = latLng;
+
                 Log.d(TAG, "onMapClick: " + latLng.toString());
                 mMap.addMarker(new MarkerOptions().position(latLng).title("MESSAGE"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
@@ -211,6 +246,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                         }
                     }
                 });
+
+        setMarkersOnMap();
+
+        /*
         // Parcours la liste des utilisateurs et positionne les marqueurs
         // On met l'objet message dans le Tag du marqueur
         new VolleyUtils().getUtilisateurs(getContext(), new VolleyUtils.ListUtilisateursAsyncResponse() {
@@ -232,10 +271,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 });
             }
         });
-
-
+        */
 
     }
+
+    public void setMarkersOnMap(){
+        for (Utilisateur utilisateur : utilisateursListDb){
+            LatLng position = new LatLng(utilisateur.getLatitude(), utilisateur.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(utilisateur.getMessage()))
+                    .setTag(utilisateur);
+        }
+    }
+
+
 
     private void enableMyLocation() {
         // vérification si la permission de localisation est déjà donnée

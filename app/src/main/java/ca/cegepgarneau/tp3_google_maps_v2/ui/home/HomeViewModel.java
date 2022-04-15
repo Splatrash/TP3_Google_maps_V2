@@ -1,19 +1,25 @@
 package ca.cegepgarneau.tp3_google_maps_v2.ui.home;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+import java.util.List;
 
-    private final MutableLiveData<String> mText;
+import ca.cegepgarneau.tp3_google_maps_v2.data.UtilisateurRoomDatabase;
+import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
 
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+public class HomeViewModel extends AndroidViewModel {
+
+    private LiveData<List<Utilisateur>> allUtilisateurs;
+    private UtilisateurRoomDatabase mDb;
+
+    public HomeViewModel(Application application) {
+        super(application);
+        mDb = UtilisateurRoomDatabase.getDatabase(application);
+        allUtilisateurs = mDb.utilisateurDao().getAllUtilisateurs();
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
+    public LiveData<List<Utilisateur>> getAllUtilisateurs() { return allUtilisateurs; }
 }

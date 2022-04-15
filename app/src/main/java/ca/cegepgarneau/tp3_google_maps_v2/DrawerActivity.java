@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -16,7 +17,13 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Random;
+
+import ca.cegepgarneau.tp3_google_maps_v2.data.AppExecutors;
+import ca.cegepgarneau.tp3_google_maps_v2.data.UtilisateurRoomDatabase;
 import ca.cegepgarneau.tp3_google_maps_v2.databinding.ActivityDrawerBinding;
+import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
+import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireAjoutMarker;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.home.HomeFragment;
 
 public class DrawerActivity extends AppCompatActivity {
@@ -24,6 +31,10 @@ public class DrawerActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityDrawerBinding binding;
     private static final String TAG = "MAIN";
+    private boolean formIsUp;
+    private UtilisateurRoomDatabase utilisateursListDb;
+
+    public static LatLng markerAjoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +42,8 @@ public class DrawerActivity extends AppCompatActivity {
 
         binding = ActivityDrawerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        formIsUp = false;
 
         setSupportActionBar(binding.appBarDrawer.toolbar);
 
@@ -85,5 +98,34 @@ public class DrawerActivity extends AppCompatActivity {
                 HomeFragment.tvDistance.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public void AjouterUnMarker(String message){
+        utilisateursListDb = UtilisateurRoomDatabase.getDatabase(this);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Random r = new Random();
+                int nbrIconPossible = 5;
+                Utilisateur utilisateur = new Utilisateur();
+                utilisateur.setFirstname("UserFirstName");
+                utilisateur.setLastname("UserLastName");
+                utilisateur.setMessage(message);
+                utilisateur.setLatitude(markerAjoute.latitude);
+                utilisateur.setLongitude(markerAjoute.longitude);
+                utilisateur.setPicture("https://robohash.org/"+"UserFirstName"+"UserLastName");
+                utilisateursListDb.utilisateurDao().insert(utilisateur);
+            }
+        });
+    }
+
+    public void closeForm(){
+        formIsUp = false;
+        FormulaireAjoutMarker formulaireAjoutMarkerRemove = (FormulaireAjoutMarker) getSupportFragmentManager()
+                .findFragmentByTag("TAG");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .remove(formulaireAjoutMarkerRemove)
+                .commit();
     }
 }
