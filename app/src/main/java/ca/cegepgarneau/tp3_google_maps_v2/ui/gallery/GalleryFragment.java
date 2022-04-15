@@ -2,6 +2,9 @@ package ca.cegepgarneau.tp3_google_maps_v2.ui.gallery;
 
 import android.os.Bundle;
 import android.util.Log;
+
+import java.io.File;
+import java.util.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,27 +77,34 @@ public class GalleryFragment extends Fragment {
     }
 
     public void refresh() {
-        new VolleyUtils().getUtilisateurs(getContext(), new VolleyUtils.ListUtilisateursAsyncResponse() {
-            @Override
-            public void processFinished(ArrayList<Utilisateur> utilisateurArrayList) {
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Pour éviter un: java.util.ConcurrentModificationException
-                        List<Utilisateur> listUtilisateurTempo = new ArrayList<Utilisateur>(utilisateurArrayList);
 
-                        // Efface la bdy
-                        mDb.utilisateurDao().deleteAllUtilisateurs();
-                        // Insère les articles dans la bd
-                        for (Utilisateur utilisateur : listUtilisateurTempo) {
-                            //Log.d("TAG", "run: " + utilisateur);
+        boolean test = false;
+        //////////////////////////////////////////////////////////
+        // Trouver comment vérifier
+        /////////////////////////////////////////////////////////
+        if (test){
+            new VolleyUtils().getUtilisateurs(getContext(), new VolleyUtils.ListUtilisateursAsyncResponse() {
+                @Override
+                public void processFinished(ArrayList<Utilisateur> utilisateurArrayList) {
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Pour éviter un: java.util.ConcurrentModificationException
+                            List<Utilisateur> listUtilisateurTempo = new ArrayList<Utilisateur>(utilisateurArrayList);
 
-                            mDb.utilisateurDao().insert(utilisateur);
+                            // Efface la bdy
+                            mDb.utilisateurDao().deleteAllUtilisateurs();
+                            // Insère les articles dans la bd
+                            for (Utilisateur utilisateur : listUtilisateurTempo) {
+                                //Log.d("TAG", "run: " + utilisateur);
+
+                                mDb.utilisateurDao().insert(utilisateur);
+                            }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
     @Override

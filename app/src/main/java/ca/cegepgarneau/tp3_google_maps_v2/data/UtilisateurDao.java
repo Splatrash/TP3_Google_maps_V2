@@ -25,4 +25,5 @@ public interface UtilisateurDao {
 
     @Query("SELECT * FROM utilisateur_table ")
     LiveData<List<Utilisateur>> getAllUtilisateurs();
+
 }

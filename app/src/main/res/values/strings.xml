@@ -12,4 +12,6 @@
     <string name="menu_carte">Carte</string>
     <string name="menu_listes">Listes</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <string name="tv_distance_default">Distance</string>
 </resources>

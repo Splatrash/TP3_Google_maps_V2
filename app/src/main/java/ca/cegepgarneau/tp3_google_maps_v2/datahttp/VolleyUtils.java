@@ -28,8 +28,6 @@ public class VolleyUtils {
 
     public void getUtilisateurs(Context context, ListUtilisateursAsyncResponse callback) {
         String url = "https://onoup.site/data.json";
-
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
                 null, new Response.Listener<JSONArray>() {
             @Override

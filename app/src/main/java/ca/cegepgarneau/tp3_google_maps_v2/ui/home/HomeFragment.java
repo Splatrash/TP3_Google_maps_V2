@@ -41,12 +41,14 @@ import ca.cegepgarneau.tp3_google_maps_v2.databinding.FragmentHomeBinding;
 import ca.cegepgarneau.tp3_google_maps_v2.datahttp.VolleyUtils;
 import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, GoogleMap.InfoWindowAdapter, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
+public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
     private static final int LOCATION_PERMISSION_CODE = 1;
-    private static final String TAG = "TAG";
+    private static final String TAG = "HOME";
     private GoogleMap mMap;
     private FragmentHomeBinding binding;
+
+    public static TextView tvDistance;
 
     private Location userLocation;
 
@@ -62,7 +64,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        tvDistance = (TextView) view.findViewById(R.id.tv_distance);
 
         SupportMapFragment mapFragment =(SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -119,6 +124,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
         /*
         //Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
@@ -129,7 +136,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         // détection du click sur une fenêtre d'information d'un marqueur
         mMap.setOnInfoWindowClickListener(this);
         // Permet de modifier l'apparence de la fenêtre d'information d'un marqueur
-        mMap.setInfoWindowAdapter(this);
 
         // Permet de détecter le click sur le bouton de position
         mMap.setOnMyLocationButtonClickListener(this);
@@ -155,7 +161,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         });
 
 
-
         // Détecter un click long sur la carte
         /////////////////////////////////////////////
         //VA SERVIR POUR AJOUTER UN MARKER SUR LA MAP
@@ -164,8 +169,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onMapLongClick(LatLng latLng) {
                 Log.d(TAG, "onMapClick: " + latLng.toString());
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
+                mMap.addMarker(new MarkerOptions().position(latLng).title("MESSAGE"));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
             }
         });
 
@@ -255,23 +260,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
      */
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
-
+        tvDistance.setVisibility(View.VISIBLE);
+        LatLng positionMarker = marker.getPosition();
+        LatLng positionUser = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
+        float[] results = new float[1];
+        Location.distanceBetween(positionMarker.latitude,positionMarker.longitude, positionUser.latitude,positionUser.longitude, results);
+        Float distance = results[0]/1000;
+        tvDistance.setText(distance.toString());
     }
 
-    // Méthode pour modifier l'apparence d'une fenêtre d'information
-    @Nullable
-    @Override
-    public View getInfoWindow(@NonNull Marker marker) {
-        return null;
-    }
-
-    // Méthode pour modifier le contenu d'une fenêtre d'information
-    // en utilisant un layout
-    @Nullable
-    @Override
-    public View getInfoContents(@NonNull Marker marker) {
-        return null;
-    }
 
     // Permet de détecter le click sur le bouton de position
     @Override
@@ -284,6 +281,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     public void onMyLocationClick(@NonNull Location location) {
 
     }
+
 
 
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/homeFragment">
     tools:context=".ui.home.HomeFragment">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,4 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/tv_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:background="#880038FF"
+        android:text="@string/tv_distance_default"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
