@@ -122,10 +122,14 @@ public class DrawerActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-
-        if(HomeFragment.tvDistance != null){
-            Float.parseFloat(HomeFragment.tvDistance.getText().toString());
-            savedInstanceState.putFloat("distance", Float.parseFloat(HomeFragment.tvDistance.getText().toString()));
+        try {
+            if(HomeFragment.tvDistance != null){
+                Float.parseFloat(HomeFragment.tvDistance.getText().toString());
+                savedInstanceState.putFloat("distance", Float.parseFloat(HomeFragment.tvDistance.getText().toString()));
+            }
+        }
+        catch (NumberFormatException e){
+            Log.d(TAG, "onSaveInstanceState: no distance set" + e);
         }
 
     }
