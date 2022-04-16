@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.squareup.picasso.Picasso;
 
 import ca.cegepgarneau.tp3_google_maps_v2.R;
 
@@ -27,17 +28,18 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private void renderWindowInfo(Marker marker, View view){
         String message = marker.getTitle();
+        String pictureURL = marker.getSnippet();
         TextView tvMessage = (TextView) view.findViewById(R.id.tv_message_map);
         if(!message.equals("")){
             tvMessage.setText(message);
         }
 
         ImageView imgPicture = (ImageView) view.findViewById(R.id.img_utilisateur_map);
-        // TODO: 2022-04-15 Remplacer par l'image auto générer
+
         //////////////////
-        //TEMPO
+        // REQUIERT PARFOIS DE FERMER ET RÉOUVRIR L'INFO WINDOW POUR QUE L'IMAGE APPARAISSE.
         ////////////////
-        imgPicture.setImageResource(R.drawable.icon1);
+        Picasso.get().load(pictureURL).into(imgPicture);
     }
 
     @Nullable

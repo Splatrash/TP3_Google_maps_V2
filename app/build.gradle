@@ -54,4 +54,7 @@ dependencies {
 
     // Google Play Service
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+
+    //Picasso, pour pouvoir loader des images par URL
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

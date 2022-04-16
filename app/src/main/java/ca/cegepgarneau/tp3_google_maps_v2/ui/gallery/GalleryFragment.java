@@ -1,5 +1,6 @@
 package ca.cegepgarneau.tp3_google_maps_v2.ui.gallery;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -76,14 +77,14 @@ public class GalleryFragment extends Fragment {
         refresh();
     }
 
+    private static boolean doesDatabaseExist(Context context, String db_name) {
+        File dbFile = context.getDatabasePath(db_name);
+        return dbFile.exists();
+    }
+
     public void refresh() {
 
-
-        boolean test = false;
-        //////////////////////////////////////////////////////////
-        // Trouver comment vérifier et ne pas appeler volley si la bd n'est pas vide
-        /////////////////////////////////////////////////////////
-        if (test){
+        if (!doesDatabaseExist(getContext(), "utilisateur_database")){
             new VolleyUtils().getUtilisateurs(getContext(), new VolleyUtils.ListUtilisateursAsyncResponse() {
                 @Override
                 public void processFinished(ArrayList<Utilisateur> utilisateurArrayList) {

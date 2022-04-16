@@ -152,11 +152,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         DrawerActivity.mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Log.d(TAG, "onMapClick: " + latLng.toString());
-                DrawerActivity.mMap.addMarker(new MarkerOptions().position(latLng)
-                        .title("Je suis ici !")
-                        .draggable(true)
-                );
                 DrawerActivity.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
                 // Supprime marker ajouté par le bouton Add
@@ -219,10 +214,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                             // Centre la carte sur la position de l'utilisateur au démarrage
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             DrawerActivity.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                            if(DrawerActivity.goToMarker != null){
+                                DrawerActivity.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DrawerActivity.goToMarker, 13));
+                                DrawerActivity.goToMarker = null;
+                            }
                         }
                     }
                 });
-
         setMarkersOnMap();
 
     }
@@ -242,7 +240,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             LatLng position = new LatLng(utilisateur.getLatitude(), utilisateur.getLongitude());
             DrawerActivity.mMap.addMarker(new MarkerOptions()
                     .position(position)
-                    .title(utilisateur.getMessage()))
+                    .title(utilisateur.getMessage())
+                    .snippet(utilisateur.getPicture()))
                     .setTag(utilisateur);
         }
     }
@@ -277,6 +276,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         Location.distanceBetween(positionMarker.latitude,positionMarker.longitude, positionUser.latitude,positionUser.longitude, results);
         Float distance = results[0]/1000;
         tvDistance.setText(distance.toString());
+    }
+
+    public void goToSelectedMessage(){
+
     }
 
 

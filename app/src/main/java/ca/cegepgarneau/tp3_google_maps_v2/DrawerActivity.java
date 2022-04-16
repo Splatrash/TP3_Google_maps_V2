@@ -44,8 +44,10 @@ public class DrawerActivity extends AppCompatActivity {
     private boolean formIsUp;
     private UtilisateurRoomDatabase utilisateursListDb;
 
-    //Variable dans l'activité principal sinon perte de ses données lors de la fermeture et réouverture de la map.
+    //Je me
     public static GoogleMap mMap;
+
+    public static LatLng goToMarker;
 
     public static LatLng markerAjoute;
 
@@ -141,6 +143,12 @@ public class DrawerActivity extends AppCompatActivity {
                 HomeFragment.tvDistance.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+
+    //Trouver ouvrir automatiquement la carte lors d'un click sur un élément de la liste.
+    public void goToMarker(LatLng markerPosition){
+        getSupportFragmentManager().beginTransaction().add(R.id.homeFragment, new HomeFragment()).commit();
     }
 
     public void AjouterUnMarker(String message){
