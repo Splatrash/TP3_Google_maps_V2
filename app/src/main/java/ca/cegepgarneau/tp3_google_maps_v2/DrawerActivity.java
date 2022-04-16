@@ -1,38 +1,35 @@
 package ca.cegepgarneau.tp3_google_maps_v2;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+
 import android.os.Bundle;
+
 import android.util.Log;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Random;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ca.cegepgarneau.tp3_google_maps_v2.data.AppExecutors;
 import ca.cegepgarneau.tp3_google_maps_v2.data.UtilisateurRoomDatabase;
 import ca.cegepgarneau.tp3_google_maps_v2.databinding.ActivityDrawerBinding;
 import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
-import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireAjoutMarker;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireModifierUtilisateur;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.home.HomeFragment;
 
@@ -41,10 +38,8 @@ public class DrawerActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityDrawerBinding binding;
     private static final String TAG = "MAIN";
-    private boolean formIsUp;
     private UtilisateurRoomDatabase utilisateursListDb;
 
-    //Je me
     public static GoogleMap mMap;
 
     public static LatLng goToMarker;
@@ -63,8 +58,6 @@ public class DrawerActivity extends AppCompatActivity {
         binding = ActivityDrawerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        formIsUp = false;
-
         prefs = this.getSharedPreferences("ca.cegepgarneau.tp3_google_maps_v2", Context.MODE_PRIVATE);
 
         if(!prefs.contains(prenomUtilisateurKey)){
@@ -78,12 +71,12 @@ public class DrawerActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_gallery, R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_drawer);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -148,7 +141,9 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
 
-    //Trouver ouvrir automatiquement la carte lors d'un click sur un élément de la liste.
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Vestige de code de mon essais pour rediriger vers la carte après le click d'un élément dans la liste.
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
     public void goToMarker(LatLng markerPosition){
         getSupportFragmentManager().beginTransaction().add(R.id.homeFragment, new HomeFragment()).commit();
     }
@@ -183,11 +178,9 @@ public class DrawerActivity extends AppCompatActivity {
             prefs.edit().putString(nomUtilisateurKey, nom).apply();
         }
         Toast.makeText(this, "Données utilisateur modifiées", Toast.LENGTH_LONG).show();
-
     }
 
     public void closeForm(){
-        formIsUp = false;
         FormulaireModifierUtilisateur formulaireModifierUtilisateurFragmentRemove = (FormulaireModifierUtilisateur) getSupportFragmentManager()
                 .findFragmentByTag("formUtilisateur");
         getSupportFragmentManager()

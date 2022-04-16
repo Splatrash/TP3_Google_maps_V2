@@ -1,24 +1,31 @@
 package ca.cegepgarneau.tp3_google_maps_v2.ui.home;
 
 import android.Manifest;
+
 import android.content.pm.PackageManager;
+
 import android.location.Location;
+
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import androidx.fragment.app.Fragment;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -39,13 +46,11 @@ import java.util.List;
 
 import ca.cegepgarneau.tp3_google_maps_v2.DrawerActivity;
 import ca.cegepgarneau.tp3_google_maps_v2.R;
-import ca.cegepgarneau.tp3_google_maps_v2.data.AppExecutors;
 import ca.cegepgarneau.tp3_google_maps_v2.databinding.FragmentHomeBinding;
-import ca.cegepgarneau.tp3_google_maps_v2.datahttp.VolleyUtils;
 import ca.cegepgarneau.tp3_google_maps_v2.model.Utilisateur;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.FormulaireAjoutMarker;
 import ca.cegepgarneau.tp3_google_maps_v2.ui.UtilisateurAdapter;
-import ca.cegepgarneau.tp3_google_maps_v2.ui.gallery.GalleryViewModel;
+
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
@@ -61,8 +66,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     private UtilisateurAdapter utilisateurAdapter;
 
     private Location userLocation;
-
-    private Marker markerCamera;
 
     private boolean formIsUp;
 
@@ -85,7 +88,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-
         // Callback lors d'une mise à jour de la position de l'utilisateur
         locationCallback = new LocationCallback() {
             @Override
@@ -99,7 +101,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
                 }
             }
         };
-
         homeViewModel.getAllUtilisateurs().observe(getViewLifecycleOwner(), new Observer<List<Utilisateur>>() {
             @Override
             public void onChanged(List<Utilisateur> utilisateursList) {
@@ -115,7 +116,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // Mise en place de l'adapter pour le recyclerView
         utilisateursListDb = new ArrayList<>();
         // Envoi une liste vide d'article dans l'adapter
@@ -153,19 +153,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onMapClick(LatLng latLng) {
                 DrawerActivity.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-
-                // Supprime marker ajouté par le bouton Add
-                if (markerCamera != null) {
-                    markerCamera.remove();
-                }
             }
         });
 
 
         // Détecter un click long sur la carte
-        /////////////////////////////////////////////
-        //VA SERVIR POUR AJOUTER UN MARKER SUR LA MAP
-        /////////////////////////////////////////////
         DrawerActivity.mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -188,8 +180,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        // Vérifie les permissions avant d'utiliser le service fusedLocationClient.getLastLocation()
-        // qui permet de connaître la dernière position
         if (ActivityCompat.checkSelfPermission(
                 getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(
@@ -263,10 +253,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
 
     // détection du click sur une fenêtre d'information d'un marqueur
-    /*
-    *  Un clic sur la fenêtre d'information doit afficher la distance entre ce marker
-    *  et la position de l’utilisateur dans un TextView.
-     */
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
         tvDistance.setVisibility(View.VISIBLE);
@@ -278,11 +264,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         tvDistance.setText(distance.toString());
     }
 
-    public void goToSelectedMessage(){
-
-    }
-
-
     // Permet de détecter le click sur le bouton de position
     @Override
     public boolean onMyLocationButtonClick() {
@@ -292,7 +273,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     // Permet de détecter le click sur la position de l'utilisateur
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-
     }
 
 

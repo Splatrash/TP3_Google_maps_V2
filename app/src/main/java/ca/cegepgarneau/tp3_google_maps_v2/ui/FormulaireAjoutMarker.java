@@ -27,11 +27,11 @@ public class FormulaireAjoutMarker extends Fragment {
 
         HomeFragment homeFragment = ((HomeFragment)FormulaireAjoutMarker.this.getParentFragment());
 
+        //Écoute le bouton ajouter du formulaire d'ajout d'un utilisateur
         btnAjouter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String message = etMessage.getText().toString().trim();
-
                 if (!"".equals(message))
                 {
                     ((DrawerActivity)getActivity()).AjouterUnMarker(message);
@@ -43,9 +43,7 @@ public class FormulaireAjoutMarker extends Fragment {
         btnAnnulerPopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 homeFragment.closeForm();
-
             }
         });
         return view;

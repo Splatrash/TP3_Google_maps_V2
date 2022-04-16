@@ -1,8 +1,10 @@
 package ca.cegepgarneau.tp3_google_maps_v2.ui.home;
 
 import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+
 import com.squareup.picasso.Picasso;
 
 import ca.cegepgarneau.tp3_google_maps_v2.R;
