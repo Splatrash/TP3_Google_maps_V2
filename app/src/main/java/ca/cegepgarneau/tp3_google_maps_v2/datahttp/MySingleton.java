@@ -45,11 +45,9 @@ public class MySingleton {
     }
 
     public RequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
+        if (requestQueue == null)
             requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
-        }
+
         return requestQueue;
     }
     public <T> void addToRequestQueue(Request<T> req) {

@@ -1,6 +1,7 @@
 package ca.cegepgarneau.tp3_google_maps_v2.model;
 
 import androidx.annotation.NonNull;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -35,21 +36,7 @@ public class Utilisateur {
     @ColumnInfo(name = "message_col")
     private String message;
 
-    /*public Utilisateur(@NonNull String firstname, @NonNull String lastname,
-                       @NonNull String picture, @NonNull Float latitude,
-                       @NonNull Float longitude, @NonNull String message){
-
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.picture = picture;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.message = message;
-    }*/
-
-    public Utilisateur() {
-
-    }
+    public Utilisateur() { }
 
     public int getId() {
         return id;

@@ -37,14 +37,12 @@ public class VolleyUtils {
                         Utilisateur utilisateur = new Utilisateur();
                         try {
                             JSONObject jsonObject = response.getJSONObject(i);
-
                             utilisateur.setPicture(jsonObject.getString("picture"));
                             utilisateur.setFirstname(jsonObject.getString("firstname"));
                             utilisateur.setLastname(jsonObject.getString("lastname"));
                             utilisateur.setMessage(jsonObject.getString("message"));
                             utilisateur.setLatitude(jsonObject.getDouble("latitude"));
                             utilisateur.setLongitude(jsonObject.getDouble("longitude"));
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
